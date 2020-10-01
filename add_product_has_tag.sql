@@ -42,5 +42,4 @@ INSERT INTO Product_has_tag
 VALUES("TV", 0000000003); /* LG SIGNATURE Z9 88 */
 
 
-
 -- SELECT * FROM Product_has_tag;
