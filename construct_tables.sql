@@ -102,11 +102,22 @@ CREATE TABLE Product_has_tag
 );
 
 
-
+/*
 CREATE TABLE `Product_has_tag` (
-	`Tag` varchar(128) NOT NULL,
-	`Product_id` varchar(128) NOT NULL,
-	PRIMARY KEY (`Tag`,`Product_id`),
-	KEY `Product_has_tag_ibfk_1` (`Product_id`),
-	CONSTRAINT `Product_has_tag_ibfk_1` FOREIGN KEY (`Product_id`) REFERENCES `Product` (`Product_id`)
+`Tag` varchar(128) NOT NULL,
+`Product_id` varchar(128) NOT NULL,
+PRIMARY KEY (`Tag`,`Product_id`),
+KEY `Product_has_tag_ibfk_1` (`Product_id`),
+CONSTRAINT `Product_has_tag_ibfk_1` FOREIGN KEY (`Product_id`) REFERENCES `Product` (`Product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+*/
+
+
+/* Added a table for product features. Didn't remember how we thought about solving that.
+Now it just has the key to the products that are featured. //Melker
+*/
+CREATE TABLE Product_featured
+(
+	Product_id VARCHAR(128) PRIMARY KEY,
+	FOREIGN KEY(Product_id) REFERENCES Product(Product_id)
+);
