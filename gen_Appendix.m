@@ -28,12 +28,16 @@ for i = 1:length(st)
             str = fileread( d(j).name );
             
             fid = fopen(name, "a");
-            title(fid, d(j).name) % add title 
-            fwrite(fid, str); % copy text
+            title(fid, d(j).name) % add title
+            fwrite(fid, str ); % copy text
+            fwrite(fid, string(newline));
+            fwrite(fid, string(newline));
+            
             fclose(fid);
         end
     end
 end
+
 
 function []=title(fid, t)
 fwrite(fid, "/*___"+upper(t) + "___*/"+newline+newline);

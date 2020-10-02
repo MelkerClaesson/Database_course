@@ -128,6 +128,8 @@ CREATE TABLE Product_featured
 	Product_id VARCHAR(128) PRIMARY KEY,
 	FOREIGN KEY(Product_id) REFERENCES Product(Product_id)
 );
+
+
 /*___ADD_PRODUCT_FEATURED.SQL___*/
 
 
@@ -143,6 +145,8 @@ INSERT INTO Product_featured VALUES(0000000007);
 INSERT INTO Product_featured VALUES(0000000008);
 -- INSERT INTO Product_featured VALUES(0000000009);
 -- INSERT INTO Product_featured VALUES(0000000010);
+
+
 /*___ADD_DEPARTMENTS.SQL___*/
 
 
@@ -151,6 +155,82 @@ INSERT INTO Product_featured VALUES(0000000008);
 INSERT INTO Department
 VALUES (0, "HomePage",
 	"Hello and welcome to my Ted-talk.", FALSE, "altonline.com", NULL);
+
+
+/*___ADD_ORDER.SQL___*/
+
+
+INSERT INTO Order_from_user
+VALUES
+(
+	0000000001,
+	"SMH4RAOvVu5z5JmbSI8IAJ6pyDh2cf208rHWWZKPPz3OnaJt5JsegT8wsRpKMn6x",
+	"2009-08-05 15:13:00",
+	0,
+	"0I3RmuXnYk0TFJxCWDZz8x7Be75e1zXNhwNgbmaNqDnzHifPUwxjN2aZMsccI4IE",
+	"2009-08-05 15:13:00",
+	199001011234 -- Pernilla
+);
+
+-- White and gold dress
+INSERT INTO Order_includes_product
+VALUES
+(
+	0000000001, -- Order
+	0000000009, -- product
+	1,          -- Quantity
+	499.9       -- price with tax
+);
+-- 2x Purple hat
+INSERT INTO Order_includes_product
+VALUES
+(
+	0000000001, -- Order
+	0000000008, -- product
+	2,          -- Quantity
+	6490.0      -- price with tax
+);
+
+
+/*
+CREATE TABLE Order_from_user
+(
+Order_id VARCHAR(128) NOT NULL PRIMARY KEY,
+Payment_ref VARCHAR(128),
+Change_date DATETIME,
+Status INT,
+Tracking_no VARCHAR(128),
+Order_date DATETIME,
+Ssn VARCHAR(128),
+FOREIGN KEY(Ssn) REFERENCES User(Ssn)
+);
+
+Status
+0  - new
+1  - open
+2  - dispatched
+
+-- Create intermediary table between orders and products.
+CREATE TABLE Order_includes_product
+(
+Order_id VARCHAR(128) REFERENCES Order_from_user(Order_id),
+Product_id VARCHAR(128) REFERENCES Product(Product_id),
+Quantity INT,
+Product_price FLOAT
+);
+
+random 64strings
+u7aMiWGUriC9Mrgd84sQUSVGEtubMbft5XQcYE603KmKczeXEjtrbeuQHdIc2zCb
+Li14v5KWFXmWv9PHb23K6AN2hdA3PSCrb1tS36zrc1JS6ZKRZ43IWYEupRyZEoRF
+x8VyecTZuNEQGRcXNsIOW3E76t2qV7Ub5yeSrGpKwFxVZzlJ32oPNWtPb5K8FNGD
+dnCtkXyZDrrJKqU3mQHKMn2jsHeEc4xbN1rbqV0uPj9oumkPhZaLh90YXYhvwubv
+7L2XjBQ6ImXldt3APjt18QlWkAfc0jz7MBiBz12nrZkWaBV33KdtfghneWKvFVjF
+Lq99VbAdqmGJBRKHvONa4CiZCqQXWB5S1QYd2iAabl3qNOKYIMLdfzwLBvHYu5FQ
+ZtDxQmWKQiut87te2VtNIECNaGcn6jeTv5bE2ZqYqCcAH1hxkkXHFHxEXCQ8Nnou
+Xoh29EFAEHwLIPIkM7cMM4rS4uHcfCxfXrY1TojZ0iRekn1mZ4F8YX4zFJI2WFPw
+*/
+
+
 /*___ADD_PRODUCT_HAS_TAG.SQL___*/
 
 /*
@@ -198,6 +278,8 @@ VALUES("TV", 0000000003); /* LG SIGNATURE Z9 88 */
 
 
 -- SELECT * FROM Product_has_tag;
+
+
 /*___ADD_PRODUCTS.SQL___*/
 
 /*
@@ -334,6 +416,8 @@ VALUES(
 );
 
 SELECT * FROM  Product;
+
+
 /*___ADD_REVIEW.SQL___*/
 
 /* review 2 is same person as review 3 */
@@ -382,7 +466,9 @@ VALUES(0000000007, 5, "Lorem Ipsum Great Product Pls Buy",
 	0000000005, 199202024567
 );
 
-SELECT * FROM Review;/*___ADD_USER.SQL___*/
+SELECT * FROM Review;
+
+/*___ADD_USER.SQL___*/
 
 INSERT INTO User
 VALUES(
@@ -397,6 +483,8 @@ VALUES(
 	5,75311, "Uppsala", 0709876543, FALSE,
 	"olasalo@yahoo.com", "ajf3lfn#j7w"
 );
+
+
 /*___QUERIE_DEPARTMENT_VIEWS.SQL___*/
 
 SELECT Department.Title AS Department, Product.Title, ROUND(Product.Price_no_tax
@@ -406,6 +494,8 @@ FROM Product
     JOIN Department ON Department.Department_id = Product.Department_id
     LEFT JOIN Review ON Review.Product_id = Product.Product_id
 GROUP BY Product.Product_id;
+
+
 /*___QUERIE_HOMEPAGE_WELCOME.SQL___*/
 
 
@@ -431,12 +521,16 @@ WHERE  Product_id IN (
 );
 SELECT * FROM Featured_Products;
 -- DROP VIEW Featured_Products;
+
+
 /*___QUERIE_ON_SALE.SQL___*/
 
 /* List of all products on sale sorted by the discount percentage (starting with the biggest discount) */
 SELECT * FROM Product
 WHERE Product.On_sale_percentage > 0
 ORDER BY On_sale_percentage DESC;
+
+
 /*___QUERIE_RELATED_PRODUCTS.SQL___*/
 
 /*
@@ -481,3 +575,31 @@ DROP VIEW myProduct;
 DROP VIEW myTags;
 DROP VIEW relatedProduct_1;
 DROP VIEW relatedProduct_2;
+
+
+/*___QUERIE_USER_ORDERS.SQL___*/
+
+
+-- SELECT * FROM Order_from_user; -- aka Order
+-- SELECT * FROM Order_includes_product;
+
+CREATE VIEW my_Orders AS
+SELECT * FROM Order_from_user
+WHERE Ssn=199001011234; -- <-- Determines which user
+
+
+SELECT my_Orders.Order_id,
+my_Orders.Status,
+Product.Title,
+Order_includes_product.Product_id,
+Order_includes_product.Quantity,
+Order_includes_product.Product_price,
+my_Orders.Order_date,
+my_Orders.Change_date,
+my_Orders.Tracking_no,
+my_Orders.Payment_ref
+FROM my_Orders
+JOIN Order_includes_product ON my_Orders.Order_id = Order_includes_product.Order_id
+JOIN Product ON Order_includes_product.Product_id = Product.Product_id;
+
+

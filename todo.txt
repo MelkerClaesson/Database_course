@@ -1,5 +1,3 @@
-add one order from user.
-
 Analyze and optimize the performance of these queries.
 Identify and choose at least one SQL query which can run faster by
 adding an index. Write SQL statement(s) for adding this index
